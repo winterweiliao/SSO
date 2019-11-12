@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SSO系统</title>
+</head>
+<body>
+
+LOGIN SUCCESS!
+
+<script>
+    {% if request.GET.app_url %}
+        setTimeout(function () {
+            window.location.href = '{% url 'login.login_redirect' %}?app_url={{ app_url }}&token={{ token }}';
+        }, 1000);
+    {% else %}
+        setTimeout(function () {
+            window.location.href = '/home/';
+        }, 1000);
+    {% endif %}
+</script>
+</body>
+</html>
