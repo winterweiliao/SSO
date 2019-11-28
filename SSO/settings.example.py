@@ -26,7 +26,7 @@ SECRET_KEY = 'v=bg%1+#*r4rx%s8s-*vl5@$*v#uusv0+9d9jiil-89x+)@5fx'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.43.236']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -39,8 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'login',
-    'home',
 ]
 
 MIDDLEWARE = [
@@ -141,5 +139,5 @@ REST_FRAMEWORK = {
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=600),
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
-    # 'JWT_RESPONSE_PAYLOAD_HANDLER': 'login.utils.jwt_response_payload_handler',
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'login.utils.jwt_response_payload_handler',
 }

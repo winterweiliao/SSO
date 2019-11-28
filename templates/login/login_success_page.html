@@ -11,11 +11,11 @@ LOGIN SUCCESS!
 <script>
     {% if request.GET.app_url %}
         setTimeout(function () {
-            window.location.href = '{% url 'login.login_redirect' %}?app_url={{ app_url }}&token={{ token }}';
+            window.location.href = '{{ app_url }}?token={{ token }}';
         }, 1000);
     {% else %}
         setTimeout(function () {
-            window.location.href = '/home/';
+            window.location.href = '/';
         }, 1000);
     {% endif %}
 </script>

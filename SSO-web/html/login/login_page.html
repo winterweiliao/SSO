@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SSO系统</title>
+    <link rel="stylesheet" type="text/css" href="/static/rest_framework/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/rest_framework/css/bootstrap-tweaks.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/rest_framework/css/prettify.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/rest_framework/css/default.css"/>
+    <script type="text/javascript" src="/static/rest_framework/js/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+<div class="tab-pane" id="post-object-form">
+    <h1>使用SSO系统登录</h1>
+    <form class="form-horizontal">
+        {% csrf_token %}
+        <fieldset>
+            <div class="form-group ">
+                <label class="col-sm-2 control-label ">
+                    用户名
+                </label>
+                <div class="col-sm-10">
+                    <label>
+                        <input name="username" class="form-control" type="text"  value="" >
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group ">
+                <label class="col-sm-2 control-label ">
+                    密码
+                </label>
+
+                <div class="col-sm-10">
+                    <label>
+                        <input name="password" class="form-control" type="password"  value="" >
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group ">
+                <label class="col-sm-2 control-label ">
+
+                </label>
+
+                <div class="col-sm-10">
+                    <label>
+                        <button class="btn btn-primary" type="button">登录</button>
+                    </label>
+                </div>
+            </div>
+
+
+        </fieldset>
+    </form>
+</div>
+
+<script>
+    $(function () {
+        $.ajax({
+            url: '{% url 'login.login_success' %}',
+            type: 'POST',
+            headers: {'Authorization': 'JWT ' + window.sessionStorage.jwt},
+            success: function (data) {
+                window.location.href = '{% url 'login.login_success_page' %}?app_url={{ app_url }}&token=' + data.token;
+            }
+        });
+
+        let login = function () {
+            let params = $('#post-object-form form').serialize();
+            $.ajax({
+                url: '{% url 'login.obtain_jwt_token' %}',
+                type: 'POST',
+                {#headers: {'X-CSRFToken': $("input[name='csrfmiddlewaretoken']").val()},#}
+                data: params,
+                {#contentType: 'application/json',#}
+                success: function (data) {
+                    if (data.token) {
+                        $.ajax({
+                            url: '{% url 'login.login_success' %}',
+                            type: 'POST',
+                            headers: {'Authorization': 'JWT ' + data.token},
+                            {#data: params,#}
+                            {#contentType: 'application/json',#}
+                            success: function (data) {
+                                window.sessionStorage.jwt = data.token;
+                                window.location.href = '{% url 'login.login_success_page' %}?app_url={{ app_url }}&token=' + data.token;
+                            }
+                        });
+                    }
+                }
+            });
+        };
+
+        $('#post-object-form button').on('click', function () {
+            login();
+        });
+
+        $(document).keyup(function (event) {
+            if (event.keyCode === 13) {
+                $("#post-object-form button").trigger("click");
+            }
+        });
+    });
+
+
+</script>
+</body>
+</html>

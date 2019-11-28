@@ -7,24 +7,23 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-{#    <link rel="icon" href="/static/others/index/favicon.ico">#}
 
-    <title>自动化运维SSO系统</title>
+    <title>SSO统一认证平台</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/static/others/index/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/others/index2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="/static/others/index/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="/static/others/index2/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="/static/others/index/css/jumbotron.css" rel="stylesheet">
+    <link href="/static/others/index2/css/jumbotron.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]>
-      <script src="/static/others/index/assets/js/ie8-responsive-file-warning.js"></script>
+      <script src="/static/others/index2/assets/js/ie8-responsive-file-warning.js"></script>
     <![endif]-->
-    <script src="/static/others/index/assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="/static/others/index2/assets/js/ie-emulation-modes-warning.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -45,7 +44,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">自动化运维SSO系统 </a>
+            <a class="navbar-brand" href="#">SSO统一认证平台 </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             {#          <form class="navbar-form navbar-right">#}
@@ -62,7 +61,7 @@
                     <span class="navbar-brand">你好，<label id="username"></label></span>
                 </div>
                 <a class="btn btn-danger hidden" id="logout">登出</a>
-                <a class="btn btn-success hidden" id="login" href="{% url 'login.login_page' %}">登录</a>
+                <a class="btn btn-success hidden" id="login" href="/login/login_page/">登录</a>
             </form>
         </div><!--/.navbar-collapse -->
     </div>
@@ -71,26 +70,31 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
     <div class="container">
-        <h1>欢迎使用自动化运维SSO系统!</h1>
-        <p>配置管理，监控平台，自动部署等。</p>
+        <h1>欢迎使用SSO统一认证平台!</h1>
+        <p>统一认证配置管理，监控平台，自动部署等系统。</p>
         <p><a class="btn btn-primary btn-lg" href="#" role="button">了解更多 &raquo;</a></p>
     </div>
 </div>
 
-<div class="container">
+<div class="container projects">
     <!-- Example row of columns -->
-    <div class="row" id="platforms">
-{#        <div class="col-md-4">#}
-{#            <h2>APP1</h2>#}
-{#            <p>配置管理，监控平台，自动部署等。 </p>#}
-{#            <p><a class="btn btn-default"#}
-{#                  href="http://127.0.0.1:8000/login/login_page/?app_url=http://127.0.0.1:8001/login/login_verification/"#}
-{#                  role="button">进入 &raquo;</a></p>#}
-{#        </div>#}
+    <div class="row hidden" id="app">
+        <div class="col-sm-6 col-md-4 col-lg-3 " v-for="platform in platforms">
+          <div class="thumbnail" style="height: 352px;">
+            <a href="{{ platform.redirect_url }}" title="Bootstrap 优站精选" target="_blank" onclick="_hmt.push(['_trackEvent', 'tile', 'click', 'youzhan-tile'])">
+              <img class="lazy" src="{{ platform.icon_url }}" width="300" height="150" data-src="{{ platform.icon_url }}" alt="Bootstrap 优站精选">
+            </a>
+            <div class="caption">
+              <h3>
+                  <a href="{{ platform.redirect_url }}" title="Bootstrap 优站精选" target="_blank" onclick="_hmt.push(['_trackEvent', 'tile', 'click', 'youzhan-tile'])">优站精选<br><small> Bootstrap 网站实例</small></a>
+              </h3>
+              <p>{{ platform.description }}</p>
+            </div>
+          </div>
+        </div>
     </div>
 
     <hr>
-
     <footer>
         <p>&copy; 2019 Company, Inc.</p>
     </footer>
@@ -101,28 +105,39 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 {#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>#}
-<script>window.jQuery || document.write('<script src="/static/others/index/assets/js/vendor/jquery.min.js"><\/script>')</script>
-<script src="/static/others/index/dist/js/bootstrap.min.js"></script>
+<script>window.jQuery || document.write('<script src="/static/others/index2/assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="/static/others/index2/dist/js/bootstrap.min.js"></script>
+<script src="/static/others/index2/dist/js/vue.min.js"></script>
+<script src="/static/others/index2/dist/js/axios.min.js"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="/static/others/index/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="/static/others/index2/assets/js/ie10-viewport-bug-workaround.js"></script>
 <script>
-    $(function () {
-        $('#logout').on('click', function () {
-            window.sessionStorage.clear();
-            window.location.href = '{% url 'login.login_logout' %}';
-        });
 
-        $.ajax({
-            url: '{% url 'login.login_success' %}',
-            type: 'POST',
-            headers: {'Authorization': 'JWT ' + window.sessionStorage.jwt},
-            success: function (data) {
-                $('#username').text(data.payload.username);
-                $('#user-info').removeClass('hidden');
-                $('#logout').removeClass('hidden');
+    if (window.sessionStorage.jwt) {
+        let payload = $.parseJSON(decodeURIComponent(escape(window.atob(window.sessionStorage.jwt.split('.')[1]))));
+
+        $('#username').text(payload.username);
+        $('#user-info').removeClass('hidden');
+        $('#logout').removeClass('hidden');
+        $('#app').removeClass('hidden');
+
+        new Vue({
+            el: '#app',
+            data: {
+                platforms: [],
             },
-            error: function (data) {
-                $('#login').removeClass('hidden');
+            mounted() {
+                axios({
+                    method: 'post',
+                    url: '/home/platforms/',
+                    headers: {'Authorization': 'JWT ' + window.sessionStorage.jwt},
+                })
+                    .then(function (response) {
+                        this.platforms = response.data.platforms;
+                    })
+                    .catch(function (error) { // 请求失败处理
+                        console.log(error);
+                    });
             }
         });
 
@@ -136,12 +151,21 @@
                     let html = '<div class="col-md-4">';
                     html += '<h2>' + platforms[i].name + '</h2>';
                     html += '<p>' + platforms[i].description +' </p>';
-                    html += '<p><a class="btn btn-default" role="button" href="http://127.0.0.1:8000/login/login_page/?app_url=' + platforms[i].redirect_url + '">进入 &raquo;</a></p>';
+                    html += '<p><a class="btn btn-default" role="button" href="' + platforms[i].redirect_url + '?token=' + window.sessionStorage.jwt + '">进入 &raquo;</a></p>';
                     html += '</div>';
                     $('#platforms').append(html);
                 }
             },
             error: function (data) {},
+        });
+    } else {
+        $('#login').removeClass('hidden');
+    }
+
+    $(function () {
+        $('#logout').on('click', function () {
+            window.sessionStorage.clear();
+            window.location.reload();
         });
     });
 </script>

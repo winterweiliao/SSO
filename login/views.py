@@ -3,23 +3,18 @@ import base64
 
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-
 from rest_framework.views import APIView
 
 
 # Create your views here.
 def login_page(request):
-    app_url = request.GET.get('app_url')
-    if app_url:
-        return render(request, 'login/login_page.html', {'app_url': app_url})
-    else:
-        return render(request, 'login/login_page.html')
+    return render(request, 'login/login_page2.html')
 
 
 def login_success_page(request):
-    app_url = request.GET.get('app_url')
     token = request.GET.get('token')
-    return render(request, 'login/login_success_page.html', {'app_url': app_url, 'token': token})
+    app_url = request.GET.get('app_url')
+    return render(request, 'login/login_success_page.html', {'token': token, 'app_url': app_url})
 
 
 def login_redirect(request):
@@ -30,7 +25,7 @@ def login_redirect(request):
 
 
 def login_logout(request):
-    return redirect('/home/')
+    return redirect('/')
 
 
 class LoginSuccessAPIView(APIView):
